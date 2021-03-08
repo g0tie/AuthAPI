@@ -3,6 +3,7 @@ const { registerCheckPassword,
     hashPassword, 
     passwordMatch 
 } = require('../helpers/common');
+const uniqid = require('uniqid');
 
 exports.register = (req, res) => {
 
@@ -39,7 +40,8 @@ exports.register = (req, res) => {
     let newUser = new UserModel({
         email,
         name,
-        password: passwordHash
+        password: passwordHash,
+        secretCode: uniqid()
     });
 
     newUser.save();
