@@ -157,7 +157,7 @@ exports.activateAccount = async (req, res) => {
 }
 
 exports.refreshToken = async (req, res) => {
-    const { token, userId } = req.body;
+    const { token } = req.body;
 
     if (!token) {
         return res
@@ -167,20 +167,22 @@ exports.refreshToken = async (req, res) => {
         })
     }
 
+    let payload;
+
     try {
 
-        let payload = jwt.verify(token, process.env.TOKEN_SECRET);
+        payload = await jwt.verify(token, process.env.TOKEN_SECRET);
 
     } catch (err) {
         console.log(err);
         res
         .status(401)
         .json({
-            error: "err"
+            error: err
         });
     }
 
-    const user = await UserModel.findOne({_id: userId});
+    const user = await UserModel.findOne({_id: payload.id});
 
     const newToken = jwt.sign({
         username: user.name,
@@ -196,7 +198,7 @@ exports.refreshToken = async (req, res) => {
     return res
     .status(201)
     .json({
-        userId: userId,
+        userId: payload.id,
         token: newToken
     });
 
