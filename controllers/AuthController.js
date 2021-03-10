@@ -4,6 +4,7 @@ const { registerCheckPassword,
     passwordMatch 
 } = require('../helpers/common');
 const uniqid = require('uniqid');
+const jwt = require('jsonwebtoken');
 
 exports.register = async (req, res) => {
 
@@ -123,10 +124,10 @@ exports.login = async (req, res) => {
   
 }
 
-exports.activateAccount = (req, res) => {
+exports.activateAccount = async (req, res) => {
 
     const { id, secretCode } = req.params;
-    const user = UserModel.findOne({_id:id});
+    const user = await UserModel.findOne({_id:id});
 
     if (!user) {
         return res
@@ -136,7 +137,7 @@ exports.activateAccount = (req, res) => {
         })
     }
 
-    if (user.secretCode === secretCode && user.isActive) {
+    if (user.secretCode === secretCode && !user.isActive) {
         user.isActive = true;
         user.save();
 
@@ -155,7 +156,7 @@ exports.activateAccount = (req, res) => {
 
 }
 
-exports.refreshToken = (req, res) => {
+exports.refreshToken = async (req, res) => {
     const { token, userId } = req.body;
 
     if (!token) {
@@ -179,7 +180,7 @@ exports.refreshToken = (req, res) => {
         });
     }
 
-    const user = UserModel.findOne({_id: userId});
+    const user = await UserModel.findOne({_id: userId});
 
     const newToken = jwt.sign({
         username: user.name,
