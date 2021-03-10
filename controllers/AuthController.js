@@ -91,5 +91,38 @@ exports.login = (req, res) => {
         });
     }
 
+    
     //genère auth token
+}
+
+exports.activateAccount = (req, res) => {
+
+    const { id, secretCode } = req.params;
+    const user = UserModel.findOne({_id:id});
+
+    if (!user) {
+        return res
+        .status(422)
+        .json({
+            error: "No user found"
+        })
+    }
+
+    if (user.secretCode === secretCode && user.isActive) {
+        user.isActive = true;
+        user.save();
+
+        return res
+        .status(201)
+        .json({
+            msg: "User account is now active"
+        })
+    } else {
+        return res
+        .status(422)
+        .json({
+            msg: "User account is already active"
+        })
+    }
+
 }
