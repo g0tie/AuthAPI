@@ -2,6 +2,7 @@
 <h2>User registering and authorizing API made with Node.js, express, mongoose and jwt</h2>
 
 <p>I made this little project to better understand node.js and how token works.</p>
+<p>rename <b>.env.example</b> into <b>.env</b> and fill the file with your config parameters.</p>
 
 <code>npm run start</code> to start project
 </br>
