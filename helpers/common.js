@@ -10,7 +10,7 @@ exports.registerCheckPassword = (password, passwordConfirm) => {
 
     return {
         status: false,
-        msg: "Error: Password and Password Confirm are not the same"
+        msg: "Password and Password Confirm are not the same"
     };
 }
 

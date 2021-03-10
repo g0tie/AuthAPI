@@ -1,9 +1,8 @@
-const mongoose = requrie('mongoose');
-
+const mongoose = require('mongoose');
 
 const connectToDb = () => {
     mongoose.connect(
-        'mongodb:/localhost:27017/AuthDB',
+        'mongodb://localhost:27017/AuthDB',
         {
             useNewUrlParser: true,
             useUnifiedTypology: true

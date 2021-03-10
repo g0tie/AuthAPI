@@ -5,7 +5,7 @@ const { registerCheckPassword,
 } = require('../helpers/common');
 const uniqid = require('uniqid');
 
-exports.register = (req, res) => {
+exports.register = async (req, res) => {
 
 
     const { 
@@ -15,7 +15,7 @@ exports.register = (req, res) => {
         passwordConfirm
     } = req.body;
 
-    const userAlreadyExist = UserModel.findOne({email: email});
+    const userAlreadyExist = await UserModel.findOne({email: email});
 
     if (userAlreadyExist) {
         return res
@@ -60,10 +60,10 @@ exports.register = (req, res) => {
     })
 }
 
-exports.login = (req, res) => {
+exports.login = async (req, res) => {
 
     const { email, password } = req.body;
-    const userExist = UserModel.findOne({email: email});
+    const userExist = await UserModel.findOne({email: email});
 
     if (!userExist) {
         return res
