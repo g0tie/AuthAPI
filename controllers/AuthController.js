@@ -91,8 +91,36 @@ exports.login = (req, res) => {
         });
     }
 
-    
-    //genère auth token
+    try {
+
+        const token = jwt.sign({ 
+            username: userExist.name, 
+            email: userExist.email, 
+            id: userExist._id 
+        }, 
+            process.env.TOKEN_SECRET, 
+        {
+            algorithm: "HS256",
+            expiresIn: 300,
+        });
+
+        return res
+        .status(201)
+        .json({
+            userId: userExist._id,
+            token,
+
+        });
+
+    } catch (err) {
+        console.log(err);
+        return res
+        .status(422)
+        .json({
+            error: err
+        })
+    }
+  
 }
 
 exports.activateAccount = (req, res) => {
@@ -124,5 +152,52 @@ exports.activateAccount = (req, res) => {
             msg: "User account is already active"
         })
     }
+
+}
+
+exports.refreshToken = (req, res) => {
+    const { token, userId } = req.body;
+
+    if (!token) {
+        return res
+        .status(401)
+        .json({
+            error: "token invalid"
+        })
+    }
+
+    try {
+
+        let payload = jwt.verify(token, process.env.TOKEN_SECRET);
+
+    } catch (err) {
+        console.log(err);
+        res
+        .status(401)
+        .json({
+            error: "err"
+        });
+    }
+
+    const user = UserModel.findOne({_id: userId});
+
+    const newToken = jwt.sign({
+        username: user.name,
+        email: user.email,
+        id: user._id
+    },
+    process.env.TOKEN_SECRET,
+    {
+        algorithm: "HS256",
+        expiresIn: 300,
+    });
+
+    return res
+    .status(201)
+    .json({
+        userId: userId,
+        token: newToken
+    });
+
 
 }
