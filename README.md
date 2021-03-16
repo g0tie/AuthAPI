@@ -4,6 +4,10 @@
 <p>I made this little project to better understand node.js and how token works.</p>
 <p>rename <b>.env.example</b> into <b>.env</b> and fill the file with your config parameters.</p>
 
+<h3>Install dependencies</h3>
+<code>npm install</code>
+
+<h3>Run the project</h3>
 <code>npm run start</code> to start project
 </br>
 <code>npm run dev</code> use nodemon for dev
